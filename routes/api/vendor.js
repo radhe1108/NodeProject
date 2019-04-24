@@ -32,7 +32,7 @@ route.delete('/', (req, res) => {
             id: req.body.id
         }
     }).then(() => {
-        console.log("Done");
+        res.send({ success: true });
     });
 
     Products.destroy({

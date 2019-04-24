@@ -1,58 +1,59 @@
 function fetchuser(done) {
-    $.get('/api/vendor',function (data) {
-        done(data)
-    })
+  $.get('/api/vendor', function (data) {
+    done(data)
+  })
 }
 function createuser(user) {
-    return(`<div class="row">
+  return (`<div class="row" id="${user.id}">
             <div class="col-4 card ">${user.id}</div>
             <div class="col-4 card ">${user.name}</div>
             <button onclick="deleteUser(${user.id})">X</button></div>`)
 }
 
-function deleteUser(userId){
+function deleteUser(userId) {
   $.ajax({
     url: `/api/vendor`,
     type: 'DELETE',
-    data: {id: userId},
-    success: function(result) { 
+    data: { id: userId },
+    success: function (result) {
+      getUsers();
     }
   });
 }
 
 
 
-$(function () {
-  let userlist=$('#user_list');
-  function getUsers(){
-  
-    fetchuser(function (users) {
-        userlist.empty()
-        for(user of users){
-            userlist.append(createuser(user))
-        }
-    })
+
+
+function getUsers() {
+  let userlist = $('#user_list');
+  fetchuser(function (users) {
+    userlist.empty()
+    for (user of users) {
+      userlist.append(createuser(user))
+    }
+  })
 };
 
-    getUsers();
+getUsers();
 
-    $('#addtask').click(() => {
-      $.post(
-        '/api/vendor',
-        {
-          name: $('#name').val(),
-        },
-        (data) => {
-          if (data) {
-            $('#name').val("");
-            
-            alert("Task added successfully!");
-            getUsers();
+$('#addtask').click(() => {
+  $.post(
+    '/api/vendor',
+    {
+      name: $('#name').val(),
+    },
+    (data) => {
+      if (data) {
+        $('#name').val("");
 
-          } else {
-            alert('Some error occurred')
-          }
-        }
-      )
-    })
-});
+        alert("Task added successfully!");
+        getUsers();
+
+      } else {
+        alert('Some error occurred')
+      }
+    }
+  )
+})
+

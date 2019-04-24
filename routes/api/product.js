@@ -1,4 +1,5 @@
 const Products = require('../../db').Products
+const CartItems = require('../../db').CartItems
 const route = require('express').Router()
 
 route.get('/', (req, res) => {
@@ -42,5 +43,22 @@ route.post('/', (req, res) => {
         })
     })
 })
+
+route.delete('/', (req, res) => {
+    Products.destroy({
+        where: {
+            id: req.body.id
+        }
+    }).then(() => {
+        res.send({ success: true })
+    });
+
+    CartItems.destroy({
+        where: {
+            productId: null
+        }
+    })
+
+});
 
 exports = module.exports = route
